@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Resolve,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
 
 import { Recipe } from './recipe.model';
@@ -17,12 +17,12 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const recipes = this.recipesService.getRecipes();
+    const recipes = this.recipesService.getRecipes(); // ავიღოთ სერვისიდან რეცეპტების copy
 
-    if (recipes.length === 0) {
-      return this.dataStorageService.fetchRecipes();
+    if (recipes.length === 0) { // თუ ცარიელია
+      return this.dataStorageService.fetchRecipes(); // სევრერიდან წამოვიღოთ
     } else {
-      return recipes;
+      return recipes; // თუ არადა რაც გვქონდა ის დავაბრუნოთ
     }
   }
 }

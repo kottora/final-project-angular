@@ -9,13 +9,14 @@ import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component
 import { RecipesResolverService } from './recipes/recipes-resolver.service';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
+import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   {
     path: 'recipes',
     component: RecipesComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard], // authentication guard გვიყენია
     children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },
@@ -35,7 +36,10 @@ const appRoutes: Routes = [
     component: ShoppingListComponent, 
     canActivate: [AuthGuard] 
   },
-  { path: 'auth', component: AuthComponent }
+  { path: 'auth', component: AuthComponent },
+  {
+    path: '**', component: PageNotFoundComponent
+  }
 ];
 
 @NgModule({

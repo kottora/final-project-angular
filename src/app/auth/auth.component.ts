@@ -10,18 +10,18 @@ import { AuthService, AuthResponseData } from './auth.service';
   templateUrl: './auth.component.html'
 })
 export class AuthComponent {
-  isLoginMode = true;
-  isLoading = false;
-  error: string = "";
+  isLoginMode = true; // html button-სთვის
+  isLoading = false; // loading spinner-სთვის
+  error: string = ""; // error მესიჯებისთვის
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
+    this.isLoginMode = !this.isLoginMode; // from sign up to login and vice versa :D
   }
 
   onSubmit(form: NgForm) {
-    if (!form.valid) {
+    if (!form.valid) { // თუ template driven ფორმის დაემიტების შემდეგ არავალიდური იყო ფორმა, არაფერი ვქნათ
       return;
     }
     const email = form.value.email;
@@ -29,26 +29,26 @@ export class AuthComponent {
 
     let authObs: Observable<AuthResponseData>;
 
-    this.isLoading = true;
+    this.isLoading = true; // ამ დროს ლოდინი დაიწყოს :)
 
-    if (this.isLoginMode) {
+    if (this.isLoginMode) { // იმის მიხედვით რომელი Button გამოიყენა მომხმარებელმა შესაბამისი request გაკეთდეს
       authObs = this.authService.login(email, password);
     } else {
       authObs = this.authService.signup(email, password);
     }
 
     authObs.subscribe(
-      (resData) => {
-        console.log(resData);
-        this.isLoading = false;
-        this.router.navigate(['/recipes']);
+      (resData) => { // თუ წარმატებით დასრულდა request
+        console.log(resData); // მაშინ დაბრუნებული response დავბეჭდოთ
+        this.isLoading = false; // ლოდინი დასრულდა
+        this.router.navigate(['/recipes']); // გადავამისამართოთ /recipes-ზე
       },
-      (errorMessage) => {
+      (errorMessage) => { // თუ არადა შესაბამისი error-ი ვაჩვენოთ
         this.error = errorMessage;
         this.isLoading = false;
       }
     );
 
-    form.reset();
+    form.reset(); // ფორმა უნდა დარესეტდეს საბმიტის მერე
   }
 }

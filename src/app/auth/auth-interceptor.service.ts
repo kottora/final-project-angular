@@ -15,12 +15,12 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     return this.authService.user.pipe(
-      take(1),
-      exhaustMap(user => {
-        if (!user) {
+      take(1), // ბოლო დაემიტებულ იუზერს იღებს და შემდეგ unsubscribe-საც უკეთებს
+      exhaustMap(user => { // შეასრულებს პირველ response-ს და შემდეგ მეორე request-ს გააკეთებს
+        if (!user) { // თუ იუზერი არ არის იმ reqeust-ს გააგზავნის რაც მიიღო
           return next.handle(req);
         }
-        const modifiedReq = req.clone({
+        const modifiedReq = req.clone({ // თუ არადა authentication-ის დამადასტურებელ ნიშანსაც მიაყოლებს :)
           params: new HttpParams().set('auth', user.token!)
         });
         return next.handle(modifiedReq);

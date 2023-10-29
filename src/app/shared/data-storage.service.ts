@@ -18,9 +18,9 @@ export class DataStorageService {
   ) {}
 
   storeRecipes() {
-    const recipes = this.recipeService.getRecipes();
-    this.http
-      .put(
+    const recipes = this.recipeService.getRecipes(); 
+    this.http // გავაგზავნოთ სერვერზე რეცეპტების copy
+      .put( // ყველა იუზერს unique id აქვს და შესაბამისად სხვადასხვა ფოლდერში შევინახავთ
         'https://test-64bc3-default-rtdb.firebaseio.com/recipes/' + this.authService?.user?.value?.id + '/data.json',
         recipes
       )
@@ -31,12 +31,12 @@ export class DataStorageService {
 
   fetchRecipes() {
     return this.http
-      .get<Recipe[]>(
+      .get<Recipe[]>( // გავაგზავნოთ get request-ი შესაბამის ფაილზე
         'https://test-64bc3-default-rtdb.firebaseio.com/recipes/' + this.authService?.user?.value?.id + '/data.json',
       )
       .pipe(
         map(recipes => {
-          return recipes.map(recipe => {
+          return recipes.map(recipe => { // თითოეული რეცეპტო გახდეს ობიექტი, რომელშიც იქნება ეს რეცეპტი და + ინგრედიენტების მასივი თუ ის არსებობს
             return {
               ...recipe,
               ingredients: recipe.ingredients ? recipe.ingredients : []
@@ -44,15 +44,15 @@ export class DataStorageService {
           });
         }),
         tap(recipes => {
-          this.recipeService.setRecipes(recipes);
+          this.recipeService.setRecipes(recipes); // დაბრუნებული რეცეპტები მივანიჭოთ ჩვენს რეცეპტების სიას
         })
       );
   }
 
   storeIngredients() {
     const ingredients = this.shoppingListService.getIngredients();
-    this.http
-      .put(
+    this.http // გავაგზავნოთ სერვერზე ინგრედიენტების copy
+      .put( // ყველა იუზერს unique id აქვს და შესაბამისად სხვადასხვა ფოლდერში შევინახავთ
         'https://test-64bc3-default-rtdb.firebaseio.com/ingredients/' + this.authService?.user?.value?.id + '/data.json',
         ingredients
       )
@@ -63,19 +63,12 @@ export class DataStorageService {
 
   fetchIngredients(){
     return this.http
-      .get<Ingredient[]>(
+      .get<Ingredient[]>( // გავაგზავნოთ get request-ი შესაბამის ფაილზე
         'https://test-64bc3-default-rtdb.firebaseio.com/ingredients/' + this.authService?.user?.value?.id + '/data.json',
       )
       .pipe(
-        map(ingredients => {
-          return ingredients.map(ingredient => {
-            return {
-              ...ingredient,
-            };
-          });
-        }),
         tap(ingredients => {
-          this.shoppingListService.setIngredients(ingredients);
+          this.shoppingListService.setIngredients(ingredients); // დაბრუნებული ინგრედიენტები მივანიჭოთ ჩვენს ინგრედიენტების მასივს
         })
       );
   }

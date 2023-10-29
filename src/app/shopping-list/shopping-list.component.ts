@@ -16,20 +16,20 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   constructor(private slService: ShoppingListService) { }
 
   ngOnInit() {
-    this.ingredients = this.slService.getIngredients();
+    this.ingredients = this.slService.getIngredients(); // shopping-list კომპონენტზე გადასვლისას ყოველთვის განახლდეს ინგრედიენტების მასივი
     this.subscription = this.slService.ingredientsChanged
       .subscribe(
         (ingredients: Ingredient[]) => {
-          this.ingredients = ingredients;
+          this.ingredients = ingredients; // მოვუსმინოთ რომ ყოველი ცვლილებისას მასივი დავაფდეითოთ
         }
       );
   }
 
   onEditItem(index: number) {
-    this.slService.startedEditing.next(index);
+    this.slService.startedEditing.next(index); // დაeditებისას startedEditing-ს იმ ინგრედიენტის ინდექსი დავუემიტოთ რომელსაც ვაედითებთ
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() { // memory leak რომ არ მოხდეს
     this.subscription.unsubscribe();
   }
 }

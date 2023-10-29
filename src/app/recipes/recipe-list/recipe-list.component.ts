@@ -20,20 +20,20 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.recipeService.recipesChanged
+    this.subscription = this.recipeService.recipesChanged // მოვუსმინოთ რეცეპტების სიის ცვლილებას რომ დავააფდეითოთ მასივი
       .subscribe(
         (recipes: Recipe[]) => {
           this.recipes = recipes;
         }
       );
-    this.recipes = this.recipeService.getRecipes();
+    this.recipes = this.recipeService.getRecipes(); // ჩატვირთვისას სერვისიდან წამოვიღოთ მასივის copy
   }
 
   onNewRecipe() {
-    this.router.navigate(['new'], {relativeTo: this.route});
+    this.router.navigate(['new'], {relativeTo: this.route}); // ახალი რეცეპტის შექმნისას გადავიდეთ new კომპონენტზე რომელიც აქტიური route-ს რელატიურია
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() { // for memory leak problem
     this.subscription.unsubscribe();
   }
 }

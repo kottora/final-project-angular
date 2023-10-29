@@ -7,7 +7,7 @@
             type="submit"
             class="btn btn-success"
             [disabled]="!recipeForm.valid">Save</button>
-          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button> <!-- გაუქმებაზე უკან გადავდივართ -->
         </div>
       </div>
       <div class="row">
@@ -31,13 +31,13 @@
               id="imagePath"
               formControlName="imagePath"
               class="form-control"
-              #imagePath>
+              #imagePath> <!-- შევინახოთ img path -->
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <img [src]="imagePath.value" class="img-responsive">
+          <img [src]="imagePath.value" class="img-responsive"> <!-- გამოვიტანოთ img -->
         </div>
       </div>
       <div class="row">
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12" formArrayName="ingredients">
+        <div class="col-xs-12" formArrayName="ingredients"> <!-- ინგრედიენტების გამოტანა -->
           <div
             class="row"
             *ngFor="let ingredientCtrl of recipeControls; let i = index"
@@ -76,7 +76,7 @@
               <button
                 type="button"
                 class="btn btn-danger"
-                (click)="onDeleteIngredient(i)">X</button>
+                (click)="onDeleteIngredient(i)">X</button> <!-- წაშლა -->
             </div>
           </div>
           <hr>
@@ -85,7 +85,7 @@
               <button
                 type="button"
                 class="btn btn-success"
-                (click)="onAddIngredient()">Add Ingredient</button>
+                (click)="onAddIngredient()">Add Ingredient</button> <!-- დამატება -->
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ import { Recipe } from '../../recipe.model';
   styleUrls: ['./recipe-item.component.scss'],
 })
 export class RecipeItemComponent implements OnInit {
-  @Input() recipe!: Recipe;
+  @Input() recipe!: Recipe; // მშობელი კომპონენტიდან მოწოდებული ინფუთები
   @Input() index!: number;
 
   ngOnInit() {

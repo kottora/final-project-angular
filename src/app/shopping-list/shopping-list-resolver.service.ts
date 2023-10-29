@@ -17,12 +17,12 @@ export class IngredientsResolverService implements Resolve<Ingredient[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const Ingredients = this.shoppingListService.getIngredients();
+    const Ingredients = this.shoppingListService.getIngredients(); // ავიღოთ სერვისიდან ინგრედიენტების copy
 
-    if (Ingredients.length === 0) {
-      return this.dataStorageService.fetchIngredients();
+    if (Ingredients.length === 0) { // თუ ცარიელია
+      return this.dataStorageService.fetchIngredients(); // სევრერიდან წამოვიღოთ
     } else {
-      return Ingredients;
+      return Ingredients; // თუ არადა რაც გვქონდა ის დავაბრუნოთ
     }
   }
 }

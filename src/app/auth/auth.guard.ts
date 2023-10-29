@@ -3,7 +3,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   Router,
-  UrlTree
+  UrlTree,
 } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -24,13 +24,13 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | Observable<boolean | UrlTree> {
     return this.authService.user.pipe(
-      take(1),
-      map(user => {
-        const isAuth = !!user;
-        if (isAuth) {
+      take(1), // ბოლო დაემიტებულ იუზერს იღებს და შემდეგ unsubscribe-საც უკეთებს
+      map((user) => {
+        const isAuth = !!user; // იუზერი არსებობს თუ არა
+        if (isAuth) { // თუ კი გადავამისამართოთ
           return true;
         }
-        return this.router.createUrlTree(['/auth']);
+        return this.router.createUrlTree(['/auth']); // თუ არადა UrlTree-ის საშუალებით გავუშვათ /auth გვერდზე
       })
     );
   }

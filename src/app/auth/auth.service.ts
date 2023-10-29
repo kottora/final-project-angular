@@ -37,9 +37,9 @@ export class AuthService {
         }
       )
       .pipe(
-        catchError(this.handleError),
+        catchError(this.handleError), // http error-ებს გავუმკლავდეთ
         tap(resData => {
-          this.handleAuthentication(
+          this.handleAuthentication( // დაბრუნებული data გამოვიყენოთ user-ის დასაემიტებლად
             resData.email,
             resData.localId,
             resData.idToken,
@@ -60,9 +60,9 @@ export class AuthService {
         }
       )
       .pipe(
-        catchError(this.handleError),
+        catchError(this.handleError), // http error-ებს გავუმკლავდეთ
         tap(resData => {
-          this.handleAuthentication(
+          this.handleAuthentication( // დაბრუნებული data გამოვიყენოთ user-ის დასაემიტებლად
             resData.email,
             resData.localId,
             resData.idToken,
@@ -78,30 +78,30 @@ export class AuthService {
       id: string;
       _token: string;
       _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData')!);
-    if (!userData) {
+    } = JSON.parse(localStorage.getItem('userData')!); // თუ login გავლილი მაქვს მაშინ localStorage-ში უნდა იყოს სტრინგად შენახული ობიექტი
+    if (!userData) { // თუ localStorage ცარიელია ესეიგი არვარ დალოგინებული
       return;
     }
 
-    const loadedUser = new User(
+    const loadedUser = new User( // javascript-ის ობიექტი გარდავქმნათ ჩვენ მიერ შექმნილ User ობიექტში
       userData.email,
       userData.id,
       userData._token,
       new Date(userData._tokenExpirationDate)
     );
 
-    if (loadedUser.token) {
-      this.user.next(loadedUser);
-      const expirationDuration =
+    if (loadedUser.token) { // თუ token არსებობს და ამავდროულად არ გასვლია ვადა
+      this.user.next(loadedUser); // მაშინ დავაემიტოთ ეს იუზერი
+      const expirationDuration = // გამოვიანგარიშოთ ვადის გასვლის დრო
         new Date(userData._tokenExpirationDate).getTime() -
         new Date().getTime();
-      this.autoLogout(expirationDuration);
+      this.autoLogout(expirationDuration); // და autologout გავაკეთოთ ვადის გასვლის შემდეგ.
     }
   }
 
   logout() {
-    this.user.next(null);
-    this.router.navigate(['/auth']);
+    this.user.next(null); // დავაემიტოთ null user-ში
+    this.router.navigate(['/auth']); // გადავიდეთ authentication გვერდზე
     // გასვლამდე გავასუფთავოთ local მეხსიერება (local storage)
     localStorage.removeItem('userData');
 
@@ -109,6 +109,7 @@ export class AuthService {
     this.recipeService.setRecipes([]);
     this.shoppingListService.setIngredients([]);
 
+    // თუ ნაადრევად გავდივართ მაშინ timeout გავწმინდოთ რომ შემდეგ ხელახლა არ გამოიძახოს autologout-ი
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
@@ -118,7 +119,7 @@ export class AuthService {
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
-    }, expirationDuration);
+    }, expirationDuration); // expirationDuration დროის შემდეგ გამოიძახება logout ფუნქცია
   }
 
   private handleAuthentication(
@@ -128,20 +129,20 @@ export class AuthService {
     expiresIn: number
   ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-    const user = new User(email, userId, token, expirationDate);
-    this.user.next(user);
-    this.autoLogout(expiresIn * 1000);
-    localStorage.setItem('userData', JSON.stringify(user));
+    const user = new User(email, userId, token, expirationDate); // ვქმნით user-ს http request-დან დაბრუნებული data-ით
+    this.user.next(user); // ვაემიტებთ ამ იუზერს
+    this.autoLogout(expiresIn * 1000); // აუტო logout-ს ვაყენებთ
+    localStorage.setItem('userData', JSON.stringify(user)); // და ვავსებთ localStorage-ს ამ იუზერ ობიექტით რომელსაც სტრინგად ვინახავთ
   }
 
   handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     
-    if (!errorRes.error || !errorRes.error.error) {
+    if (!errorRes.error || !errorRes.error.error) { // http request ასეთი სახის ობიექტს აბრუნებს
       return throwError(errorMessage);
     }
 
-    console.log(errorRes);
+    console.log(errorRes); // კონსოლში უკეთ ვნახავთ
 
     switch (errorRes.error.error.message) {
       case 'INVALID_LOGIN_CREDENTIALS':

@@ -10,7 +10,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
-  private userSub: Subscription | undefined;
+  private userSub: Subscription | undefined; // for unsubscribe
   userName: string | undefined;
 
   constructor(
@@ -20,17 +20,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userSub = this.authService.user.subscribe((user) => {
-      this.isAuthenticated = !!user;
-      this.userName = user?.email;
+      this.isAuthenticated = !!user; // თუ იუზერი გვყავს მაშინ გამოჩნდეს header-ზე routerlink-ები
+      this.userName = user?.email;  // და შესაბამისი ემაილიც თუ არადა არც გამოჩნდება
     });
   }
 
-  onSaveData() {
-    this.dataStorageService.storeRecipes();
-    this.dataStorageService.storeIngredients();
+  onSaveData() { // savedata ღილაკზე დაჭერის შემდეგ
+    this.dataStorageService.storeRecipes(); // შევინახოთ რეცეპტები სერვერზე
+    this.dataStorageService.storeIngredients(); // და შევინახოთ ინგრედიენტებიც სერვერზე
   }
 
-  onFetchData() {
+  onFetchData() { // fetchdata ღილაკზე დაჭერის შემდეგ
     this.dataStorageService.fetchRecipes().subscribe(
       (recipes) => {
         console.log(recipes);

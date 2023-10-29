@@ -20,6 +20,8 @@ import { RecipeService } from './recipes/recipe.service';
 import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.component';
+import { PageNotFoundService } from './auth/page-not-found/PageNotFound.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     RecipeEditComponent,
     AuthComponent,
     LoadingSpinnerComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +50,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
   providers: [
     ShoppingListService,
     RecipeService,
+    PageNotFoundService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

@@ -13,31 +13,30 @@ export class RecipeDetailComponent implements OnInit {
   recipe!: Recipe;
   id!: number;
 
-  constructor(private recipeService: RecipeService,
-              private route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(
+    private recipeService: RecipeService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          this.id = +params['id'];
-          this.recipe = this.recipeService.getRecipe(this.id);
-        }
-      );
+    this.route.params // ვუსმონოთ avtivated route-ის პარამეტრებს
+      .subscribe((params: Params) => {
+        this.id = +params['id']; // და ავიღოთ იქიდან id
+        this.recipe = this.recipeService.getRecipe(this.id); // და შესაბამისად რეცეპტი
+      });
   }
 
   onAddToShoppingList() {
-    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients); // რეცეპტის ინგრედიენტები დავამატოთ shopping-list-ში
   }
 
   onEditRecipe() {
-    this.router.navigate(['edit'], {relativeTo: this.route});
+    this.router.navigate(['edit'], { relativeTo: this.route }); // რეცეპტის დაედიტებაზე გადავიდეთ edit-ზე
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id);
-    this.router.navigate(['/recipes']);
+    this.recipeService.deleteRecipe(this.id); // წავშალოთ რეცეპტი
+    this.router.navigate(['/recipes']); // და დავბრუნდეთ /recipes გვერდზე
   }
 }
